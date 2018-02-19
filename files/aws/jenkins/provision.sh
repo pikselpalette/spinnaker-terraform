@@ -86,26 +86,26 @@ cd /tmp/terraform/ ; curl -O http://localhost:8080/jnlpJars/jenkins-cli.jar
 #	'tempaccount' is a temporary account, obviously, and will be deleted at the end of this script after a fresh
 #		'admin' account has been created with credentials provided in terraform.tfvars
 #
-java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ login --username tempaccount --password blah123
+# java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ login --username tempaccount --password blah123
 
 #
 #	Install jenkins plugins
 #
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin chucknorris
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin git
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin github-api
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin github
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin git-parameter
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin job-dsl
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin parameterized-trigger
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin shelve-project-plugin
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin ssh
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin swarm
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin credentials-binding
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin workflow-step-api
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin ws-cleanup
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin plain-credentials
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ install-plugin postbuildscript
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin chucknorris
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin git
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin github-api
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin github
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin git-parameter
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin job-dsl
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin parameterized-trigger
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin shelve-project-plugin
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin ssh
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin swarm
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin credentials-binding
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin workflow-step-api
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin ws-cleanup
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin plain-credentials
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 install-plugin postbuildscript
 
 #
 #	OR find all the jobs in the jobs/ dir and install them all
@@ -115,7 +115,7 @@ do
 	sleep 2
 	job_name=$(echo $job_xml | sed -e 's/\/tmp\/terraform\/jobs\///' | sed -e 's/\/config.xml//')
 
-	/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ create-job $job_name < $job_xml
+	/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 create-job $job_name < $job_xml
 done
 
 
@@ -134,10 +134,10 @@ sleep 60
 #
 #	Create admin user, delete tempaccount, and reload jenkins config
 #
-echo "jenkins.model.Jenkins.instance.securityRealm.createAccount(\"$1\", \"$2\")" | java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ groovy =
+echo "jenkins.model.Jenkins.instance.securityRealm.createAccount(\"$1\", \"$2\")" | java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 groovy =
 
 rm -rf /var/lib/jenkins/users/tempaccount/
-/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ reload-configuration
+/usr/bin/java -jar /tmp/terraform/jenkins-cli.jar -s http://localhost:8080/ -auth tempaccount:blah123 reload-configuration
 
 update-rc.d nginx enable
 /etc/init.d/nginx restart
