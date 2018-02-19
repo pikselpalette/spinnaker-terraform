@@ -14,7 +14,7 @@ resource "aws_vpc" "main" {
 /* IELB Private subnets */
 resource "aws_subnet" "ielb_private_subnets" {
 
-  count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+  count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
   
   cidr_block           = "${element(split (".", var.vpc_cidr), 0)}.${element(split (".", var.vpc_cidr), 1)}.${element(split (";", "${lookup(var.ielb_private_subnet_block, count.index)}"), 0)}"
   availability_zone    = "${var.region}${element(split (":", "${lookup(var.aws_azs, var.region)}"), count.index%"${lookup(var.aws_az_counts, var.region)}")}"
@@ -28,7 +28,7 @@ resource "aws_subnet" "ielb_private_subnets" {
 /* EELB Public subnets */
 resource "aws_subnet" "eelb_public_subnet" {
 
-  count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+  count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
 
   cidr_block           = "${element(split (".", var.vpc_cidr), 0)}.${element(split (".", var.vpc_cidr), 1)}.${element(split (";", "${lookup(var.eelb_public_subnet_block, count.index)}"), 0)}"
   availability_zone   = "${var.region}${element(split (":", "${lookup(var.aws_azs, var.region)}"), count.index%"${lookup(var.aws_az_counts, var.region)}")}"
@@ -43,7 +43,7 @@ resource "aws_subnet" "eelb_public_subnet" {
 /* ADMIN Public subnets */
 resource "aws_subnet" "admin_public_subnet" {
 
-  count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+  count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
 
   cidr_block           = "${element(split (".", var.vpc_cidr), 0)}.${element(split (".", var.vpc_cidr), 1)}.${element(split (";", "${lookup(var.admin_public_subnet_block, count.index)}"), 0)}"
   availability_zone   = "${var.region}${element(split (":", "${lookup(var.aws_azs, var.region)}"), count.index%"${lookup(var.aws_az_counts, var.region)}")}"
@@ -58,7 +58,7 @@ resource "aws_subnet" "admin_public_subnet" {
 /* EC2 Public subnets */
 resource "aws_subnet" "ec2_public_subnet" {
 
-  count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+  count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
 
   cidr_block           = "${element(split (".", var.vpc_cidr), 0)}.${element(split (".", var.vpc_cidr), 1)}.${element(split (";", "${lookup(var.ec2_public_subnet_block, count.index)}"), 0)}"
   availability_zone   = "${var.region}${element(split (":", "${lookup(var.aws_azs, var.region)}"), count.index%"${lookup(var.aws_az_counts, var.region)}")}"
@@ -93,7 +93,7 @@ resource "aws_route_table" "gw_rt" {
 
 /* Associate the routing table to the EELB public subnets */
 resource "aws_route_table_association" "eelb_public" {
-    count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+    count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
     subnet_id = "${element(aws_subnet.eelb_public_subnet.*.id, count.index)}"
     route_table_id = "${aws_route_table.gw_rt.id}"
     depends_on = ["aws_vpc.main", "aws_internet_gateway.gw"]
@@ -101,7 +101,7 @@ resource "aws_route_table_association" "eelb_public" {
 
 /* Associate the routing table to the ADMIN public subnets */
 resource "aws_route_table_association" "admin_public" {
-    count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+    count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
     subnet_id = "${element(aws_subnet.admin_public_subnet.*.id, count.index)}"
     route_table_id = "${aws_route_table.gw_rt.id}"
     depends_on = ["aws_vpc.main", "aws_internet_gateway.gw"]
@@ -109,7 +109,7 @@ resource "aws_route_table_association" "admin_public" {
 
 /* Associate the routing table to the EC2 public subnets */
 resource "aws_route_table_association" "ec2_public" {
-    count = "${length(split(":", lookup(var.aws_azs, var.region)))}"
+    count = "${min(length(split(":", lookup(var.aws_azs, var.region))), 4)}"
     subnet_id = "${element(aws_subnet.ec2_public_subnet.*.id, count.index)}"
     route_table_id = "${aws_route_table.gw_rt.id}"
     depends_on = ["aws_vpc.main", "aws_internet_gateway.gw"]
