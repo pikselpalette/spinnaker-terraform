@@ -37,7 +37,7 @@ webpackJsonp([1,2],[
           gateUrl: '' + gateUrl,
           bakeryDetailUrl: bakeryBaseUrl + '/api/v1/global/logs/{{context.status.id}}?html=true',
           pollSchedule: 30000,
-          defaultTimeZone: 'America/New_York', // see http://momentjs.com/timezone/docs/#/data-utilities/
+          defaultTimeZone: 'Europe/London', // see http://momentjs.com/timezone/docs/#/data-utilities/
           providers: {
             gce: {
               defaults: {
