@@ -15,9 +15,9 @@ jenkins_instance_type = "t2.small"
 bastion_instance_type = "t2.micro"
 spinnaker_instance_type = "m4.2xlarge"
 
-created_by = "Kenzan Spinnaker Terraform"
+created_by = "Spinnaker-Terraform"
 
-internal_dns_zone = "kenzanlabs.int"
+internal_dns_zone = "sequoia.int"
 
 
 #
@@ -29,7 +29,7 @@ jenkins_admin_username = "admin"
 #	This NEEDS TO BE SET. Either in this file or you will be prompted for them.
 #		If you set them in here, uncomment them.
 #
-#jenkins_admin_password = "DO NOT LEAVE EMPTY IF YOU SET IT IN HERE"
+jenkins_admin_password = "spiky2spiky"
 
 #
 #	IAM roles
