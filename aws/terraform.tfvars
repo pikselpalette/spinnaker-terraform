@@ -5,7 +5,7 @@
 region = "us-east-1"
 vpc_cidr = "192.168.0.0/16"
 vpc_name = "vpc_spinnaker"
-ssh_key_name = "my-aws-account-keypair"
+ssh_key_name = "terraform-spinnaker-keypair"
 
 ssh_private_key_location = "~/.ssh/id_rsa_spinnaker_terraform"
 ssh_public_key_location = "~/.ssh/id_rsa_spinnaker_terraform.pub"

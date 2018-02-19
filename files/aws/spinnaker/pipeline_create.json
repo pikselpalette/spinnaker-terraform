@@ -55,7 +55,7 @@
           "cloudProvider": "aws",
           "strategy": "highlander",
           "application": "appname",
-          "keyPair": "my-aws-account-keypair",
+          "keyPair": "terraform-spinnaker-keypair",
           "provider": "aws",
           "virtualizationType": null,
           "subnetType": "ec2_public (vpc_X)",

@@ -6,7 +6,7 @@ available_ifconfig_providers=(ipinfo.io/ip ifconfig.co ifconfig.me)
 
 iam_roles_to_check_for=(base_iam_role jenkins_role properties_and_logging_role spinnaker_role)
 iam_profiles_to_check_for=(jenkins_profile spinnaker_profile properties_and_logging_profile)
-keypairs_to_check_for=(my-aws-account-keypair)
+keypairs_to_check_for=(terraform-spinnaker-keypair)
 subnet_tags_to_check_for=
 
 while  [[ $# > 0 ]]
